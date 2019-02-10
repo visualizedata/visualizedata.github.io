@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Parsons MS Data Visualization</title>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400" rel="stylesheet">
+</head>
+<style>
+@keyframes fadeIn {
+	0% {opacity:0;}
+	100% {opacity:1;}
+}
+body, html {
+	scroll-snap-type: both mandatory;
+	top:0;
+	left:0;
+	margin:0%;
+	animation:fadeIn 0.1s ease-in-out;
+}
+table{
+	margin:0%;
+	z-index:1;
+	transition: 1s all ease-in-out;
+	transform-origin: 0% 0%;
+	animation:fadeIn 1s ease-in-out;
+}
+tr {
+	white-space: nowrap;
+	margin:0%;
+}
+td {
+	margin:0%;
+	width:100%;
+	height:100vh;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	display:inline-block;
+	scroll-snap-align: center;
+	scroll-snap-stop: always;
+}
+td img {
+	width:100%;
+	vertical-align:top;
+	transform:scale(1.2);
+	z-index:1;
+}
+.menu {
+	font-family:'Roboto Mono', monospace;
+	font-weight:300;
+	letter-spacing:0.05em;
+	text-transform:uppercase;
+	position:fixed;
+	bottom:0;
+	width:100%;
+	height:20vh;
+	background-color:#202123;
+	z-index:2;
+	box-shadow:-0.1em -0.1em 1.5em #CCC;
+	text-align:center;
+}
+li {
+	display:inline-block;
+	margin:2%;
+	cursor:pointer;
+	vertical-align:middle;
+	color:white;
+}
+li:hover {
+	color:#D64E3A;
+
+}
+.material-icons {
+	font-size:2.5em;
+	color:white;
+}
+.material-icons:hover {
+	color:#D64E3A;
+
+}
+@media screen and (max-width:910px){
+	td img {
+		height:100%;
+		width:auto;
+	}
+	td {
+		width:auto;
+	}	
+}
+</style>
+<body>
+
+<!-- toolbar -->
+<div class="menu">
+	<ul>
+		<li id="new-puzzle">New puzzle</li>
+		<li id="zoom-in"><i class="material-icons">play_circle_outline</i></li>
+		<li id="zoom-out"><i class="material-icons">stop</i></li>
+		<li id="timer">Timer:</li>
+		<li id="score">Score:</li>
+	</ul>
+</div>
+
+<!-- projects jigsaw -->
+<table id="projects"></table>
+
+</body>
+<script>
+data = ['json/projectdata.json', 'json/studentdata.json'];
+
+Promise.all(data.map(url => d3.json(url))).then(function(values) {
+
+    var projects = values[0]; //the project data
+    var students = values[1]; // the student data
+    shuffle(projects);
+    console.log(projects);
+
+    //the functions to pass data through
+    createGrid(projects, '#projects');
+    newPuzzle(projects);
+
+});
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
+
+function createGrid(data, location_id){
+	count = Math.sqrt(data.length);
+	tableby = Math.ceil(count); 
+	target = document.querySelector(location_id); 
+	row_count = [];
+	for(i=0;i<data.length;i++){
+		if(i== 0 | i % tableby == 0 ){
+			appendNewRow(data,'photoUrl', target)
+		} else {
+			appendToRow(data,'photoUrl')
+		}
+	}
+}
+
+function appendNewRow(data, img_field, target){
+	tr = document.createElement('tr');
+	tr.id="row"+i;
+	for(j=i;j<i+tableby;j++){
+		row_count.push({
+			id: j,
+			row: "row"+i
+		});
+	};
+	td = document.createElement('td');
+	img = document.createElement('img');
+	img.src="assets/img_work/"+data[i][img_field];
+	td.appendChild(img);
+	tr.appendChild(td);
+	target.append(tr);
+}
+
+function appendToRow(data,img_field){
+	selection = row_count.filter(function(d){return d.id == i });
+	insert = document.querySelector('#'+selection[0]['row']);
+	td = document.createElement('td');
+	img = document.createElement('img');
+	img.src="assets/img_work/"+data[i][img_field];
+	td.appendChild(img);
+	insert.append(td);
+}
+
+// menu actions
+zoomout = document.querySelector('#zoom-out');
+zoomin = document.querySelector('#zoom-in');
+
+
+function newPuzzle(data){
+	newpuzzle = document.querySelector('#new-puzzle');
+	newpuzzle.onclick=function() {
+		shuffle(data);
+		console.log(data);
+		document.querySelector('#projects').innerHTML="";
+		createGrid(data, '#projects');
+	}
+}
+
+zoomout.onclick=function() {
+	zoomOut();
+}
+zoomin.onclick=function() {
+	zoomIn();
+}
+
+function zoomOut() {
+	table = document.querySelector('table');
+	table.style.transform="scale(0.28)";
+}
+
+function zoomIn() {
+	table = document.querySelector('table');
+	table.style.transform="scale(1)";
+}
+
+</script>
+</html>
