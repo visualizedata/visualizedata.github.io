@@ -11,6 +11,8 @@ The [site data](https://github.com/visualizedata/visualizedata.github.io/blob/ma
 
 Anyone in the Parsons Data Visualization community (students, faculty, alumni, staff, friends) may make open source contributions to this site. Contributions are encouraged and are completely open to any and all aspects of the site, including the design, site structure, data structure, and content. You can see contributors to the site [here](https://github.com/visualizedata/visualizedata.github.io/graphs/contributors). 
 
+Resource: [design research slides](https://docs.google.com/presentation/d/1rLMUoE3UA82pBVzYqlknpMoe-WO4KDzzXd7LFhz6p58/edit?usp=sharing) by Emily Chu.  
+
 Please report *all* [bugs and issues](https://help.github.com/articles/about-issues/) (even those you are not able to address) in [the repository](https://github.com/visualizedata/visualizedata.github.io/issues).  
 
 Contributions must follow our [GitHub workflow](https://github.com/visualizedata/github-workflow). All pull requests (within reason) that follow this process will be merged and incorporated into the site. For those new to GitHub and/or making open source contributions in GitHub, [Michael Wolf](https://github.com/wolfm2) has created a self-learning series (must have newschool.edu account to view): 
